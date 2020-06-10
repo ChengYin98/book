@@ -1,5 +1,6 @@
 import React from "react";
 import BookDataService from '../services/book.services';
+import BookTable from './book-table.component';
 import { Link } from "react-router-dom";
 
 export default class BookList extends React.Component {
@@ -72,18 +73,18 @@ export default class BookList extends React.Component {
   }
 
   searchName() {
-      /*this.retrieveBook()
-      let allBook = this.state.book;
-      const keyword = this.state.searchName;
-      allBook = allBook.filter((book) => {
-        let bookName = book.name.toLowerCase()
-        return bookName.indexOf(
-          keyword.toLowerCase()) !== -1
-      })
-      console.log("First")
-      this.setState({
-          book: allBook
-      })*/
+    /*this.retrieveBook()
+    let allBook = this.state.book;
+    const keyword = this.state.searchName;
+    allBook = allBook.filter((book) => {
+      let bookName = book.name.toLowerCase()
+      return bookName.indexOf(
+        keyword.toLowerCase()) !== -1
+    })
+    console.log("First")
+    this.setState({
+        book: allBook
+    })*/
     BookDataService.findByName(this.state.searchName)
       .then(response => {
         this.setState({
@@ -122,30 +123,33 @@ export default class BookList extends React.Component {
           </div>
         </div>
         <div className="col-md-6">
-          <h4>Book List</h4>
+          <div>
+            <h4>Book List</h4>
 
-          <ul className="list-group">
-            {book.data &&
-              book.data.map((book, index) => (
-                <li
-                  className={
-                    "list-group-item " +
-                    (index === currentIndex ? "active" : "")
-                  }
-                  onClick={() => this.setActiveBook(book, index)}
-                  key={index}
-                >
-                  {book.name}
-                </li>
-              ))}
-          </ul>
+            <ul className="list-group">
+              {book.data &&
+                book.data.map((book, index) => (
+                  <li
+                    className={
+                      "list-group-item " +
+                      (index === currentIndex ? "active" : "")
+                    }
+                    onClick={() => this.setActiveBook(book, index)}
+                    key={index}
+                  >
+                    {book.name}
+                  </li>
+                ))}
+            </ul>
 
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllBook}
-          >
-            Remove All
+            <button
+              className="m-3 btn btn-sm btn-danger"
+              onClick={this.removeAllBook}
+            >
+              Remove All
           </button>
+          </div>
+          <div><BookTable book = {this.state.book.data}/></div>
         </div>
         <div className="col-md-6">
           {currentBook ? (
@@ -155,7 +159,7 @@ export default class BookList extends React.Component {
                 <label>
                   <strong>Images:</strong>
                 </label>{" "}
-                {currentBook.images.map((image,i) => <img src={image} alt="Lights" style={{width:`100%` }} key={i}/>)}
+                {currentBook.images.map((image, i) => <img src={image} alt="Lights" style={{ width: `100%` }} key={i} />)}
               </div>
               <div>
                 <label>
@@ -178,11 +182,11 @@ export default class BookList extends React.Component {
               </Link>
             </div>
           ) : (
-            <div>
-              <br />
-              <p>Please click on a Book...</p>
-            </div>
-          )}
+              <div>
+                <br />
+                <p>Please click on a Book...</p>
+              </div>
+            )}
         </div>
       </div>
     );
