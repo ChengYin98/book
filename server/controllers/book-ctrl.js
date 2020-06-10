@@ -119,7 +119,7 @@ getBooks = async (req, res) => {
             return res.status(200).json({ success: true, data: book })
         }).catch(err => console.log(err))
     } else {
-        await Book.find({}).sort('name').exec(function (err, books) {
+        await Book.find({}).collation({locale: "en" }).sort('name').exec(function (err, books) {
             if (err) {
                 return res.status(400).json({ success: false, error: err })
             }
