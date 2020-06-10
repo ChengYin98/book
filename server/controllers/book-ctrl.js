@@ -76,7 +76,7 @@ deleteBook = async (req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        
+
         console.log("Second comment:" + book)
         if (!book) {
             return res
@@ -105,12 +105,12 @@ getBookById = async (req, res) => {
 }
 
 getBooks = async (req, res) => {
-    if(req.query.name != null) {
-        await Book.find({ name: new RegExp(req.query.name, "i")}, (err, book) => {
+    if (req.query.name != null) {
+        await Book.find({ name: new RegExp(req.query.name, "i") }, (err, book) => {
             if (err) {
                 return res.status(400).json({ success: false, error: err })
             }
-    
+
             if (!book) {
                 return res
                     .status(404)
@@ -118,8 +118,8 @@ getBooks = async (req, res) => {
             }
             return res.status(200).json({ success: true, data: book })
         }).catch(err => console.log(err))
-    }else{
-        await Book.find({}, (err, books) => {
+    } else {
+        await Book.find({}).sort('name').exec(function (err, books) {
             if (err) {
                 return res.status(400).json({ success: false, error: err })
             }
@@ -129,7 +129,7 @@ getBooks = async (req, res) => {
                     .json({ success: false, error: `Book not found` })
             }
             return res.status(200).json({ success: true, data: books })
-        }).catch(err => console.log(err))
+        })
     }
 }
 
