@@ -105,32 +105,20 @@ getBookById = async (req, res) => {
 }
 
 getBooks = async (req, res) => {
-    if (req.query.name != null) {
-        await Book.find({ name: new RegExp(req.query.name, "i") }, (err, book) => {
-            if (err) {
-                return res.status(400).json({ success: false, error: err })
-            }
+    const name = req.query.name;
+    var condition = name ? { name: { $regex: new RegExp(name), $options: 'i' } } : {};
 
-            if (!book) {
-                return res
-                    .status(404)
-                    .json({ success: false, error: `Book not found` })
-            }
-            return res.status(200).json({ success: true, data: book })
-        }).catch(err => console.log(err))
-    } else {
-        await Book.find({}).collation({locale: "en" }).sort('name').exec(function (err, books) {
-            if (err) {
-                return res.status(400).json({ success: false, error: err })
-            }
-            if (!books.length) {
-                return res
-                    .status(404)
-                    .json({ success: false, error: `Book not found` })
-            }
-            return res.status(200).json({ success: true, data: books })
-        })
-    }
+    await Book.find(condition).collation({ locale: "en" }).sort('name').exec(function (err, books) {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!books.length) {
+            return res
+                .status(404)
+                .json({ success: false, error: `Book not found` })
+        }
+        return res.status(200).json({ success: true, data: books })
+    })
 }
 
 module.exports = {
